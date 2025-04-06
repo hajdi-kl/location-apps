@@ -61,7 +61,17 @@
         "targetName": "lint"
       }
     },
-    "@nxext/capacitor/plugin"
+    "@nxext/capacitor/plugin",
+    {
+      "plugin": "@nx/webpack/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "buildDepsTargetName": "build-deps",
+        "watchDepsTargetName": "watch-deps"
+      }
+    }
   ],
   "generators": {
     "@nx/angular:application": {
