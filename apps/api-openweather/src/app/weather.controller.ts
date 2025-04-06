@@ -25,17 +25,24 @@ export class WeatherController {
   async getWeatherData(
     @Query('lat') lat: string,
     @Query('lon') lon: string,
+    @Query('q') q: string,
     @Query('refresh') refresh: string,
     @Req() req: any,
   ) {
-    if (!lat || !lon) {
+    let queryParam: string;
+
+    if (lat && lon && !isNaN(Number(lat)) && !isNaN(Number(lon))) {
+      queryParam = `lat=${lat}&lon=${lon}`;
+    } else if (q) {
+      queryParam = `q=${q}`;
+    } else {
       throw new HttpException(
-        'Latitude and Longitude are required',
+        'Either valid Latitude and Longitude or a query parameter (q) is required',
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    const cacheKey = `weather_${lat}_${lon}`;
+    const cacheKey = `weather_${queryParam}`;
 
     if (!refresh) {
       const cachedData = await this.cacheManager.get(cacheKey);
@@ -49,13 +56,13 @@ export class WeatherController {
     const apiKey = this.appService.weatherApiKey;
     try {
       const response = await axios.get(
-        // `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`,
+        // `https://api.openweathermap.org/data/2.5/weather?${queryParam}&appid=${apiKey}`,
         'http://localhost:3000/api/weather/dummy'
       );
       const data = response.data as WeatherResponse;
 
       // Cache the response for 15 minutes
-      await this.cacheManager.set(cacheKey, data, 900 );
+      await this.cacheManager.set(cacheKey, data, 900);
 
       return data;
     } catch {
