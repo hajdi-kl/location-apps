@@ -17,6 +17,9 @@
     "paths": {
       "@angular-monorepo/ui-lib-language-select": [
         "libs/ui-lib-language-select/src/index.ts"
+      ],
+      "@angular-monorepo/ui-lib-location-select": [
+        "libs/ui-lib-location-select/src/index.ts"
       ]
     }
   },
