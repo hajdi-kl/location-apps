@@ -3,7 +3,7 @@
 ## Run tasks
 
 ```sh
-npx nx show project ionicapp-weather
+nx show project ionicapp-weather
 ```
 ```sh
 nx serve ionicapp-weather
@@ -13,4 +13,15 @@ nx run ionicapp-weather:sync:android
 ```
 ```sh
 nx run ionicapp-weather:open:android
+```
+
+
+```sh
+export WEATHER_API_KEY={key}
+NX_SKIP_NX_CACHE=true
+nx serve api-openweather
+```
+Add controllers:
+```sh
+nx g @nx/nest:controller apps/api-openweather/src/app/weather
 ```

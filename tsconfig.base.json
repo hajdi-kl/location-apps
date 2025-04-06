@@ -20,7 +20,8 @@
       ],
       "@angular-monorepo/ui-lib-location-select": [
         "libs/ui-lib-location-select/src/index.ts"
-      ]
+      ],
+      "@shared/*": ["shared/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
