@@ -1,0 +1,7 @@
+{
+  "name": "ionicapp-weather",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

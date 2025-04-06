@@ -42,3 +42,9 @@ Thumbs.db
 .nx/workspace-data
 
 .angular
+
+# Capacitor native project directories
+apps/ionicapp-maps/android/
+apps/ionicapp-maps/ios/
+apps/ionicapp-weather/android/
+apps/ionicapp-weather/ios/
