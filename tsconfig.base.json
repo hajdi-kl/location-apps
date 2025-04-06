@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@angular-monorepo/ui-lib-language-select": [
+        "libs/ui-lib-language-select/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
