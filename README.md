@@ -18,8 +18,10 @@ nx run ionicapp-weather:open:android
 
 ```sh
 export WEATHER_API_KEY={key}
+NX_SKIP_NX_CACHE=true
 nx serve api-openweather
 ```
+Add controllers:
 ```sh
 nx g @nx/nest:controller apps/api-openweather/src/app/weather
 ```
