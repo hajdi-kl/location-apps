@@ -3,9 +3,10 @@
   (click)="presentActionSheet()"
   class="location-card"
 >
-  <ion-card-content>
-    <div class="card-content">
-      <span class="card-text">Select Location</span>
+<ion-card-content>
+  <div class="card-content">
+    <span class="card-text">Select Location</span>
+    <div class="card-icon">
       <ng-content></ng-content>
       @if (!disabled) {
       <ion-icon
@@ -18,5 +19,6 @@
       ></ion-icon>
       }
     </div>
-  </ion-card-content>
+  </div>
+</ion-card-content>
 </ion-card>

@@ -1,8 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { UiLibLocationSelectComponent } from '@angular-monorepo/ui-lib-location-select';
-import { LibLoaderComponent } from '@libs/util-lib-common/src/lib/components/loader.component'; // Importing LoaderComponent
+import {
+  Payload,
+  UiLibLocationSelectComponent,
+} from '@angular-monorepo/ui-lib-location-select';
+import { LibLoaderComponent } from '@libs/util-lib-common/src/lib/components/loader.component';
 import { LibLocationSelectCustomIconDirective } from '@libs/ui-lib-location-select/src/lib/ui-lib-location-select/ui-lib-location-select-custom-icon.directive';
 
 @Component({
@@ -19,10 +22,21 @@ import { LibLocationSelectCustomIconDirective } from '@libs/ui-lib-location-sele
 })
 export class HomePageComponent {
   loading = signal(false);
+  locationData: Payload | null = null; // Property to store selected location
+  locationOptions = [
+    { name: 'London', value: 'London' },
+    { name: 'New York', value: 'New York' },
+    { name: 'Tokyo', value: 'Tokyo' },
+  ]; // Array of name-value pairs
 
   constructor() {
-    setTimeout(() => {
-      this.loading.set(true);
-    }, 2000);
+    // setTimeout(() => {
+    //   this.loading.set(true);
+    // }, 2000);
+  }
+
+  onLocationChange(selectedLocation: Payload) {
+    this.locationData = selectedLocation; // Update locationData with selected value
+    console.log('Location data updated:', this.locationData);
   }
 }

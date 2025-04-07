@@ -4,6 +4,8 @@ import {
   ContentChild,
   AfterContentChecked,
   signal,
+  EventEmitter,
+  Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LibLocationSelectCustomIconDirective } from '../ui-lib-location-select/ui-lib-location-select-custom-icon.directive';
@@ -16,6 +18,9 @@ import {
 } from '@ionic/angular/standalone';
 import { Geolocation } from '@capacitor/geolocation';
 import { removeCommentsFromString } from '@libs/util-lib-common/src/lib/utils/html';
+import { LocationData, SelectOption } from '@shared/types/common';
+
+export type Payload = LocationData | SelectOption;
 
 @Component({
   selector: 'lib-ui-lib-location-select',
@@ -25,8 +30,10 @@ import { removeCommentsFromString } from '@libs/util-lib-common/src/lib/utils/ht
 })
 export class UiLibLocationSelectComponent implements AfterContentChecked {
   @Input() disabled = false;
+  @Input() options: { name: string; value: string }[] = [];
+  @Output() selectionChange = new EventEmitter<Payload>();
+
   isActionSheetOpen = false;
-  data: any = {};
   hasCustomIcon = signal(false);
 
   @ContentChild(LibLocationSelectCustomIconDirective, { static: false })
@@ -46,31 +53,29 @@ export class UiLibLocationSelectComponent implements AfterContentChecked {
   }
 
   async presentActionSheet() {
-    if (this.disabled) return; // Prevent action if disabled
+    if (this.disabled) return;
 
-    this.isActionSheetOpen = true; // Set action sheet state to open
+    this.isActionSheetOpen = true;
     const actionSheet = await this.actionSheetController.create({
       header: 'Choose an option',
       buttons: [
-        {
-          text: 'Set Query',
+        ...this.options.map((option) => ({
+          text: option.name,
           handler: () => {
-            this.data = { query: 'fixedQueryString' };
-            console.log('Query set:', this.data);
+            this.selectionChange.emit(option);
           },
-        },
+        })),
         {
           text: 'Set Latitude and Longitude',
           handler: async () => {
             try {
-              const position = await Geolocation.getCurrentPosition();
-              this.data = {
+              const position = await Geolocation.getCurrentPosition(),
+              payload = {
                 lat: position.coords.latitude,
                 lon: position.coords.longitude,
               };
-              console.log('Lat Lon set:', this.data);
-
-            } catch (error) {
+              this.selectionChange.emit(payload);
+            } catch {
               this.showToast("Can't get location");
             }
           },
@@ -79,14 +84,14 @@ export class UiLibLocationSelectComponent implements AfterContentChecked {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Action cancelled');
+            // No action needed for cancel button
           },
         },
       ],
     });
 
     actionSheet.onDidDismiss().then(() => {
-      this.isActionSheetOpen = false; // Reset action sheet state
+      this.isActionSheetOpen = false;
     });
 
     await actionSheet.present();
