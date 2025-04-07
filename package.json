@@ -40,6 +40,7 @@
     "@angular/compiler-cli": "~19.2.0",
     "@angular/language-service": "~19.2.0",
     "@capacitor/cli": "^6.0.0",
+    "@capacitor/geolocation": "^7.1.1",
     "@eslint/js": "^9.8.0",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",

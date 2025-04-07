@@ -1,2 +1,7 @@
-  <h1>Weather Home</h1>
-
+<lib-ui-lib-location-select [disabled]="false">
+  <div libLocationSelectCustomIcon>
+    @if (loading()) {
+    <lib-loader></lib-loader>
+    }
+  </div>
+</lib-ui-lib-location-select>
