@@ -16,14 +16,17 @@
     "baseUrl": ".",
     "paths": {
       "@angular-monorepo/app-lib-about": ["libs/app-lib-about/src/index.ts"],
+      "@angular-monorepo/app-lib-weather": [
+        "libs/app-lib-weather/src/index.ts"
+      ],
       "@angular-monorepo/ui-lib-language-select": [
         "libs/ui-lib-language-select/src/index.ts"
       ],
       "@angular-monorepo/ui-lib-location-select": [
         "libs/ui-lib-location-select/src/index.ts"
       ],
-      "@shared/*": ["shared/*"],
-      "@libs/*": ["libs/*"]
+      "@libs/*": ["libs/*"],
+      "@shared/*": ["shared/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
