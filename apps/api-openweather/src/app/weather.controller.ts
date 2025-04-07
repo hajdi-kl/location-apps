@@ -55,6 +55,7 @@ export class WeatherController {
     // Fetch weather data from OpenWeatherMap API
     const apiKey = this.appService.weatherApiKey;
     try {
+      // https://api.openweathermap.org/data/2.5/weather?q=London&appid=YOUR_API_KEY&lang=sl
       const response = await axios.get(
         // `https://api.openweathermap.org/data/2.5/weather?${queryParam}&appid=${apiKey}`,
         'http://localhost:3000/api/weather/dummy'

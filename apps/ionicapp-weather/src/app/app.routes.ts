@@ -3,6 +3,15 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
+    component: import('./layout/layout.component').then((m) => m.LayoutComponent),
+    children: [
+      {
+        path: 'weather',
+        loadChildren: () =>
+          import('./pages/weather/weather.routes').then((m) => m.routes),
+      },
+      { path: '', redirectTo: 'weather', pathMatch: 'full' },
+    ],
   },
+  { path: '**', redirectTo: '' },
 ];
