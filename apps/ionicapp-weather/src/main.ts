@@ -1,4 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+import { provideStore } from '@ngrx/store';
+
 import {
   RouteReuseStrategy,
   provideRouter,
@@ -12,11 +14,16 @@ import {
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
+import { languageSlice, loadingSlice } from './app/store';
 
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideStore({
+      [languageSlice.prop]: languageSlice.reducer,
+      [loadingSlice.prop]: loadingSlice.reducer,
+    }),
   ],
 });

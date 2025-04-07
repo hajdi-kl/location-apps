@@ -1,1 +1,7 @@
-<p>UiLibLanguageSelect works!</p>
+<ion-button fill="clear" (click)="openLanguageSelector()">
+  {{ selectedLanguage() }}
+  <ion-icon
+    [name]="isActionSheetOpen ? 'chevron-up-outline' : 'chevron-down-outline'"
+    slot="end"
+  ></ion-icon>
+</ion-button>
