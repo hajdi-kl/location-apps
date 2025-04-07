@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
 import { UiLibLanguageSelectComponent } from '@angular-monorepo/ui-lib-language-select';
+import { Store } from '@ngrx/store';
+import { languageSlice } from '../../store';
 
 @Component({
   selector: 'app-header',
@@ -17,11 +19,20 @@ import { UiLibLanguageSelectComponent } from '@angular-monorepo/ui-lib-language-
   ],
 })
 export class HeaderComponent {
+  currentLanguage = signal('en');
+
   availableLanguages = [
     { name: 'English', value: 'en' },
     { name: 'Spanish', value: 'es' },
     { name: 'French', value: 'fr' },
   ];
 
-  currentLanguage = 'en';
+  constructor(private store: Store) {
+    effect(() => {
+      const newLanguage = this.currentLanguage();
+      this.store.dispatch(
+        languageSlice.set({ [languageSlice.prop]: newLanguage })
+      );
+    });
+  }
 }

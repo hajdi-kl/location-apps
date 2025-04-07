@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from '../components/shared/header.component';
+import { HeaderComponent } from '../../components/shared/header.component';
 import { IonicModule } from '@ionic/angular';
 
 

@@ -4,7 +4,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./layout/index.component').then((m) => m.IndexComponent),
+      import('./pages/layout/index.component').then((m) => m.IndexComponent),
     children: [
       {
         path: 'weather',
@@ -17,7 +17,7 @@ export const routes: Routes = [
           import('@libs/app-lib-about/src/lib/pages/about.routes').then((m) => m.routes),
       },
       { path: '', redirectTo: 'weather', pathMatch: 'full' },
-      { path: '**', loadComponent: () => import('./pages/not-found.page').then((m) => m.NotFoundPageComponent) },
+      { path: '**', loadComponent: () => import('./pages/not-found-base/not-found.page').then((m) => m.NotFoundPageComponent) },
     ],
   },
 ];

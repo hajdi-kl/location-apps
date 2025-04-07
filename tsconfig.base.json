@@ -25,6 +25,9 @@
       "@angular-monorepo/ui-lib-location-select": [
         "libs/ui-lib-location-select/src/index.ts"
       ],
+      "@angular-monorepo/util-lib-common": [
+        "libs/util-lib-common/src/index.ts"
+      ],
       "@libs/*": ["libs/*"],
       "@shared/*": ["shared/*"]
     }
