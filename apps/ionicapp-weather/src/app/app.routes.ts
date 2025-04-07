@@ -11,6 +11,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./pages/weather/weather.routes').then((m) => m.routes),
       },
+      {
+        path: 'about',
+        loadChildren: () =>
+          import('@libs/app-lib-about/src/lib/pages/about.routes').then((m) => m.routes),
+      },
       { path: '', redirectTo: 'weather', pathMatch: 'full' },
     ],
   },

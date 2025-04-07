@@ -1,6 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-title> Title </ion-title>
-    <app-language-select slot="end"></app-language-select>
+    <lib-ui-lib-language-select
+      slot="end"
+      [languages]="availableLanguages"
+      [(selectedLanguage)]="currentLanguage"
+    ></lib-ui-lib-language-select>
   </ion-toolbar>
 </ion-header>

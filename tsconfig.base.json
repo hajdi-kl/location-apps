@@ -15,13 +15,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@angular-monorepo/app-lib-about": ["libs/app-lib-about/src/index.ts"],
       "@angular-monorepo/ui-lib-language-select": [
         "libs/ui-lib-language-select/src/index.ts"
       ],
       "@angular-monorepo/ui-lib-location-select": [
         "libs/ui-lib-location-select/src/index.ts"
       ],
-      "@shared/*": ["shared/*"]
+      "@shared/*": ["shared/*"],
+      "@libs/*": ["libs/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
