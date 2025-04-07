@@ -30,6 +30,7 @@ export type Payload = LocationData | SelectOption;
 })
 export class UiLibLocationSelectComponent implements AfterContentChecked {
   @Input() disabled = false;
+  @Input() placeholder = 'Location';
   @Input() options: { name: string; value: string }[] = [];
   @Output() selectionChange = new EventEmitter<Payload>();
 

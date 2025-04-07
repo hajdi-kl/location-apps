@@ -1,0 +1,12 @@
+<lib-ui-lib-location-select
+  [disabled]="loading"
+  [options]="locationOptions"
+  [placeholder]="'Select a location'"
+  (selectionChange)="onLocationChange($event)"
+>
+  <div libLocationSelectCustomIcon>
+    @if (loading) {
+    <lib-loader></lib-loader>
+    }
+  </div>
+</lib-ui-lib-location-select>

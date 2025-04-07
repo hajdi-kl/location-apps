@@ -5,14 +5,24 @@ import { createGenericSelector } from '@libs/util-lib-common/src/lib/store/gener
 
 export const enum StoreProps {
   Language = 'language',
+  Location = 'location',
   Loading = 'loading',
 }
+
 const languageReducer = createGenericReducer(StoreProps.Language, 'en'),
   languageSlice = {
     reducer: languageReducer.reducer,
     selector: createGenericSelector(StoreProps.Language),
     prop: StoreProps.Language,
     set: languageReducer.set,
+  };
+
+const locationReducer = createGenericReducer(StoreProps.Location, ''),
+locationSlice = {
+    reducer: locationReducer.reducer,
+    selector: createGenericSelector(StoreProps.Location),
+    prop: StoreProps.Location,
+    set: locationReducer.set,
   };
 
 const loadingReducer = createGenericReducer(StoreProps.Loading, true),
@@ -24,4 +34,4 @@ const loadingReducer = createGenericReducer(StoreProps.Loading, true),
   };
 
 
-export { languageSlice, loadingSlice };
+export { languageSlice, locationSlice, loadingSlice };

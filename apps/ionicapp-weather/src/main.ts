@@ -14,7 +14,7 @@ import {
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
-import { languageSlice, loadingSlice } from './app/store';
+import { languageSlice, loadingSlice, locationSlice } from './app/store';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -23,6 +23,7 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideStore({
       [languageSlice.prop]: languageSlice.reducer,
+      [locationSlice.prop]: locationSlice.reducer,
       [loadingSlice.prop]: loadingSlice.reducer,
     }),
   ],
