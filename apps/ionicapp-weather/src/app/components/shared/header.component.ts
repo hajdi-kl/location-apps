@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { IonHeader, IonToolbar, IonTitle } from '@ionic/angular/standalone';
+import { LanguageSelectComponent } from './language-select.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
+  standalone: true,
+  imports: [IonHeader, IonToolbar, IonTitle, LanguageSelectComponent, RouterModule],
 })
 export class HeaderComponent {}

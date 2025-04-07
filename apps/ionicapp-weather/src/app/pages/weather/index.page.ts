@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
+// import { RouterModule } from '@angular/router';
+import {
+  /* IonRouterLink, */ IonRouterOutlet,
+} from '@ionic/angular/standalone';
 @Component({
-  selector: 'app-index',
-  imports: [CommonModule],
-  templateUrl: './index.component.html',
-  styleUrl: './index.component.scss',
+  selector: 'app-weather-index',
+  imports: [IonRouterOutlet /* IonRouterLink, RouterModule */],
+  templateUrl: './index.page.html',
+  styleUrl: './index.page.scss',
 })
-export class IndexComponent {}
+export class IndexPageComponent {}

@@ -3,7 +3,8 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    component: import('./layout/layout.component').then((m) => m.LayoutComponent),
+    loadComponent: () =>
+      import('./layout/index.component').then((m) => m.IndexComponent),
     children: [
       {
         path: 'weather',
