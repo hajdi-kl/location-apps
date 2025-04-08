@@ -1,3 +1,6 @@
+<ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+  <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
 <div class="weather-data-container">
   @if (weatherData$ | async; as weatherData) {
   <ion-card class="weather-data-card">

@@ -25,7 +25,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { WEATHER_API_URL } from '@shared/config/weather';
 import { parseJSON } from '@libs/util-lib-common/src/lib/utils/common';
 import { WeatherResponse } from '@shared/types/weather';
-import { IonCard, IonCardContent } from '@ionic/angular/standalone';
+import { IonCard, IonCardContent, IonRefresher, IonRefresherContent } from '@ionic/angular/standalone';
 
 const decodeLocationData = (locationString: string) => {
   let locationData: Payload | null;
@@ -45,6 +45,8 @@ const decodeLocationData = (locationString: string) => {
     TranslatePipe,
     IonCard,
     IonCardContent,
+    IonRefresher,
+    IonRefresherContent
   ],
   providers: [DatePipe],
   templateUrl: './home.page.html',
@@ -55,6 +57,7 @@ export class HomePageComponent {
   location$;
   locationDisplay$;
   weatherData$: Observable<WeatherData | null>;
+  language$;
   error = signal(false);
 
   constructor(
@@ -66,33 +69,45 @@ export class HomePageComponent {
     this.loading$ = this.store.select(loadingSlice.selector);
     this.weatherData$ = this.store.select(weatherSlice.selector);
     this.location$ = this.store.select(locationSlice.selector);
+    this.language$ = this.store.select(languageSlice.selector);
 
     combineLatest([
-      this.store.select(languageSlice.selector),
+      this.language$,
       this.location$,
     ]).subscribe(([language, locationString]) => {
       this.checkAndFetchWeatherData(language, decodeLocationData(locationString));
     });
 
-    this.locationDisplay$ = this.location$.pipe(
-      map((locationString) => {
+    this.locationDisplay$ = combineLatest([this.location$, this.weatherData$]).pipe(
+      map(([locationString, weatherData]) => {
         const locationData = decodeLocationData(locationString);
         if (locationData && 'lat' in locationData && 'lon' in locationData) {
-          return 'Current Location';
+          // TODO since we load from localStorage, may not be trully current on mobile! Extend effect that preloads location, and possibly ask for current location then?
+          return `Current Location (${weatherData?.location || ''})`;
         }
         return locationData?.name || '';
       })
     );
   }
 
-  checkAndFetchWeatherData(language: string, locationData: any | null) {
+  handleRefresh(event: CustomEvent) {
+    combineLatest([
+      this.language$,
+      this.location$
+    ]).subscribe(([language, locationString]) => {
+      const locationData = decodeLocationData(locationString);
+      this.checkAndFetchWeatherData(language, locationData, event); // Pass refresh as true
+    });
+  }
+
+  checkAndFetchWeatherData(language: string, locationData: any | null, refresher?: CustomEvent) {
     if (locationData && language) {
       this.store.dispatch(loadingSlice.set({ [loadingSlice.prop]: true }));
       this.error.set(false);
 
       const params: any = {
         lang: language,
-        refresh: true,
+        refresh: !!refresher,
       };
 
       if (locationData.lat && locationData.lon) {
@@ -122,6 +137,7 @@ export class HomePageComponent {
               icon: data.weather[0].icon,
               dt: data.dt,
               formattedDate,
+              location: data.name
             };
             this.store.dispatch(
               weatherSlice.set({ [weatherSlice.prop]: storeData })
@@ -136,6 +152,7 @@ export class HomePageComponent {
             this.store.dispatch(
               loadingSlice.set({ [loadingSlice.prop]: false })
             );
+            (refresher?.target as HTMLIonRefresherElement).complete();
           })
         )
         .subscribe();
