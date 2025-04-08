@@ -14,7 +14,7 @@ import {
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
-import { appDefaultLanguage, languageSlice, loadingSlice, locationSlice } from './app/store';
+import { appDefaultLanguage, languageSlice, loadingSlice, locationSlice, weatherSlice } from './app/store';
 import {
   HttpClient,
   provideHttpClient,
@@ -40,6 +40,7 @@ bootstrapApplication(AppComponent, {
       [languageSlice.prop]: languageSlice.reducer,
       [locationSlice.prop]: locationSlice.reducer,
       [loadingSlice.prop]: loadingSlice.reducer,
+      [weatherSlice.prop]: weatherSlice.reducer,
     }),
     provideEffects(AppEffects),
     provideTranslateService({

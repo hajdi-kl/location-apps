@@ -1,15 +1,18 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { tap } from 'rxjs/operators';
-import { initializeApp, languageSlice, locationSlice } from '../store';
+import { initializeApp, languageSlice, locationSlice, StoreProps } from '../store';
 import { Payload } from '@angular-monorepo/ui-lib-location-select';
 import { parseJSON } from '@libs/util-lib-common/src/lib/utils/common';
 import { Store } from '@ngrx/store';
+import { LocaleService } from './locale.service';
+import { Language } from '@shared/config';
 
 @Injectable({ providedIn: 'root' })
 export class PersistDataService {
   private actions$ = inject(Actions);
   private store = inject(Store);
+  private localeService = inject(LocaleService);
 
   getLocalStorageItem(key: string): string | null {
     return localStorage.getItem(key);
@@ -34,6 +37,8 @@ export class PersistDataService {
               this.store.dispatch(
                 languageSlice.set({ [languageSlice.prop]: language })
               );
+
+              this.localeService.registerLocale(language as Language);
             }
 
             const location = this.getLocalStorageItem(locationSlice.prop) || '',
@@ -58,9 +63,16 @@ export class PersistDataService {
           tap((action) => {
             const value = action[slice.prop];
             this.setLocalStorageItem(slice.prop, value);
+            this.checkForMoreSideEffects(slice.prop as StoreProps, value);
           })
         ),
       { dispatch: false }
     );
+  }
+
+  checkForMoreSideEffects(prop: StoreProps, value: any) {
+    if (prop == StoreProps.Language) {
+      this.localeService.registerLocale(value as Language);
+    }
   }
 }

@@ -1,18 +1,25 @@
-import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import {
   languageSlice,
   loadingSlice,
   locationSlice,
+  weatherSlice,
 } from '@apps/ionicapp-weather/src/app/store/index';
+import { WeatherData } from '@apps/ionicapp-weather/src/app/models/weather.model';
+
 import { LocationSelectComponent } from '../components/location-select.component';
 import { Payload } from '@angular-monorepo/ui-lib-location-select';
-import { catchError, combineLatest, finalize, tap } from 'rxjs';
+import { catchError, combineLatest, finalize, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { SelectOption } from '@shared/types/common';
-import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
+import {
+  TranslateDirective,
+  TranslatePipe,
+  TranslateService,
+} from '@ngx-translate/core';
 import { WEATHER_API_URL } from '@shared/config/weather';
 import { parseJSON } from '@libs/util-lib-common/src/lib/utils/common';
 import { WeatherResponse } from '@shared/types/weather';
@@ -26,14 +33,22 @@ import { WeatherResponse } from '@shared/types/weather';
     TranslatePipe,
     TranslateDirective,
   ],
+  providers: [DatePipe],
   templateUrl: './home.page.html',
   styleUrl: './home.page.scss',
 })
 export class HomePageComponent {
   loading$;
+  weatherData$: Observable<WeatherData | null>;
 
-  constructor(private store: Store, private http: HttpClient) {
+  constructor(
+    private store: Store,
+    private http: HttpClient,
+    private translate: TranslateService,
+    private datePipe: DatePipe
+  ) {
     this.loading$ = this.store.select(loadingSlice.selector);
+    this.weatherData$ = this.store.select(weatherSlice.selector);
 
     combineLatest([
       this.store.select(languageSlice.selector),
@@ -65,21 +80,35 @@ export class HomePageComponent {
         params.q = locationData.value;
       }
 
+      this.store.dispatch(
+        weatherSlice.set({ [weatherSlice.prop]: null })
+      );
+
       // Todo add FE cache in service as well to avoid same calls
       this.http
         .get(WEATHER_API_URL + '/data', { params })
         .pipe(
           tap((response) => {
             const data = response as WeatherResponse;
-            const storeData = {
+
+            const date = new Date(data.dt * 1000),
+              dateFormat = this.translate.instant('dateFormat'),
+              formattedDate = this.datePipe.transform(date, dateFormat) || '';
+
+            const storeData: WeatherData = {
               temp: data.main.temp,
               feelsLike: data.main.feels_like,
               weather: data.weather[0].description,
               icon: data.weather[0].icon,
-            }
+              dt: data.dt,
+              formattedDate,
+            };
+            this.store.dispatch(
+              weatherSlice.set({ [weatherSlice.prop]: storeData })
+            );
           }),
           catchError((error) => {
-            console.error('Error fetching data:', error);
+            console.error('Error fetching weather data', error);
             return [];
           }),
           finalize(() => {

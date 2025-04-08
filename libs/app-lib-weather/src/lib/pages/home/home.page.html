@@ -2,4 +2,15 @@
   <lib-location-select [loading]="loading$ | async"></lib-location-select>
   <h1>{{ 'hello' | translate }}</h1>
   <div translate="hello"></div>
+
+  @if (weatherData$ | async; as weatherData) {
+  <div>
+    <p>Temperature: {{ weatherData.temp }}°C</p>
+    <p>Weather: {{ weatherData.feelsLike }}°C</p>
+    <p>{{ weatherData.formattedDate }}</p>
+    <img [src]="'http://openweathermap.org/img/w/' + weatherData.icon + '.png'" alt="Weather icon" />
+  </div>
+  } @else {
+  <!-- <div *ngIf="error">{{ error }}</div> -->
+  }
 </div>
