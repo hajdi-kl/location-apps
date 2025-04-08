@@ -9,7 +9,6 @@ import { WeatherTranslationService } from './weather/translations/translation.se
 
 @Module({
   imports: [CacheModule.register({
-    ttl: 900, // Default cache time-to-live (900 seconds = 15 minutes)
     max: 100, // Maximum number of items in cache
   }),
 ],

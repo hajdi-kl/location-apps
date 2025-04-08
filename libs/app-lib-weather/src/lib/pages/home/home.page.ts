@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Store } from '@ngrx/store';
 import {
@@ -11,26 +11,38 @@ import { WeatherData } from '@shared/types/weather';
 
 import { LocationSelectComponent } from '../components/location-select.component';
 import { Payload } from '@angular-monorepo/ui-lib-location-select';
-import { catchError, combineLatest, finalize, Observable, tap } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  finalize,
+  map,
+  Observable,
+  tap,
+} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { SelectOption } from '@shared/types/common';
-import {
-  TranslateDirective,
-  TranslatePipe,
-  TranslateService,
-} from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { WEATHER_API_URL } from '@shared/config/weather';
 import { parseJSON } from '@libs/util-lib-common/src/lib/utils/common';
 import { WeatherResponse } from '@shared/types/weather';
 import { IonCard, IonCardContent } from '@ionic/angular/standalone';
 
+const decodeLocationData = (locationString: string) => {
+  let locationData: Payload | null;
+  try {
+    locationData = parseJSON(locationString) as Payload | null;
+  } catch {
+    locationData = null;
+  }
+
+  return locationData;
+};
 @Component({
   selector: 'lib-app-home',
   imports: [
     CommonModule,
     LocationSelectComponent,
     TranslatePipe,
-    TranslateDirective,
     IonCard,
     IonCardContent,
   ],
@@ -40,7 +52,10 @@ import { IonCard, IonCardContent } from '@ionic/angular/standalone';
 })
 export class HomePageComponent {
   loading$;
+  location$;
+  locationDisplay$;
   weatherData$: Observable<WeatherData | null>;
+  error = signal(false);
 
   constructor(
     private store: Store,
@@ -50,24 +65,30 @@ export class HomePageComponent {
   ) {
     this.loading$ = this.store.select(loadingSlice.selector);
     this.weatherData$ = this.store.select(weatherSlice.selector);
+    this.location$ = this.store.select(locationSlice.selector);
 
     combineLatest([
       this.store.select(languageSlice.selector),
-      this.store.select(locationSlice.selector),
+      this.location$,
     ]).subscribe(([language, locationString]) => {
-      let locationData: Payload | null;
-      try {
-        locationData = parseJSON(locationString) as Payload | null;
-      } catch {
-        locationData = null;
-      }
-      this.checkAndFetchWeatherData(language, locationData);
+      this.checkAndFetchWeatherData(language, decodeLocationData(locationString));
     });
+
+    this.locationDisplay$ = this.location$.pipe(
+      map((locationString) => {
+        const locationData = decodeLocationData(locationString);
+        if (locationData && 'lat' in locationData && 'lon' in locationData) {
+          return 'Current Location';
+        }
+        return locationData?.name || '';
+      })
+    );
   }
 
   checkAndFetchWeatherData(language: string, locationData: any | null) {
     if (locationData && language) {
       this.store.dispatch(loadingSlice.set({ [loadingSlice.prop]: true }));
+      this.error.set(false);
 
       const params: any = {
         lang: language,
@@ -81,9 +102,7 @@ export class HomePageComponent {
         params.q = locationData.value;
       }
 
-      this.store.dispatch(
-        weatherSlice.set({ [weatherSlice.prop]: null })
-      );
+      this.store.dispatch(weatherSlice.set({ [weatherSlice.prop]: null }));
 
       // Todo add FE cache in service as well to avoid same calls
       this.http
@@ -108,8 +127,9 @@ export class HomePageComponent {
               weatherSlice.set({ [weatherSlice.prop]: storeData })
             );
           }),
-          catchError((error) => {
-            console.error('Error fetching weather data', error);
+          catchError(() => {
+            this.error.set(true);
+
             return [];
           }),
           finalize(() => {

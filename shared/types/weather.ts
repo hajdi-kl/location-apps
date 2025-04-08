@@ -56,4 +56,5 @@ export type WeatherTranslationData = {
   selectLocation: string;
   selectLocationDescription: string;
   loadingData: string;
+  errorMessage: string;
 };

@@ -3,9 +3,11 @@
   <ion-card class="weather-data-card">
     <ion-card-content>
       <div>
-        <p>Temperature: {{ weatherData.temp }}°C</p>
-        <p>Weather: {{ weatherData.feelsLike }}°C</p>
+        <p>{{ locationDisplay$ | async}}</p>
         <p>{{ weatherData.formattedDate }}</p>
+        <p>{{ weatherData.weather }}</p>
+        <p>Temperature: {{ weatherData.temp }}°C</p>
+        <p>Feels like: {{ weatherData.feelsLike }}°C</p>
         <img
           [src]="'http://openweathermap.org/img/w/' + weatherData.icon + '.png'"
           alt="Weather icon"
@@ -14,9 +16,8 @@
     </ion-card-content>
   </ion-card>
 
-  } @else { @if (false) {
-  <!-- <div *ngIf="error">{{ error }}</div> -->
-
+  } @else { @if (error()) {
+  <p class="ion-text-center text-danger">{{ 'errorMessage' | translate }}</p>
   } @else {
   <h2 class="ion-text-center">{{ 'selectLocation' | translate }}</h2>
   <p class="ion-text-center">{{ 'selectLocationDescription' | translate }}</p>

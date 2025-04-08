@@ -26,9 +26,9 @@ export class LocationSelectComponent {
 
   locationOptions = [
     { name: 'Ljubljana', value: 'Ljubljana' },
-    { name: 'Celje', value: 'Celje' },
     { name: 'Maribor', value: 'Maribor' },
-    { name: 'Invalid', value: 'Invalid' },
+    { name: 'Celje', value: 'Celje' },
+    { name: 'Invalid Location', value: 'Invalid location' },
   ];
 
   selectLocation = '';

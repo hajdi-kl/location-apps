@@ -13,8 +13,8 @@ import { AppService } from '../app.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { WeatherResponse } from '@shared/types/weather';
 // import { WEATHER_API_URL } from '@shared/config/weather';
-import { Language } from '@shared/config/index';
 import { WeatherTranslationService } from './translations/translation.service';
+import { Language } from '@shared/config';
 
 @Controller('weather')
 export class WeatherController {
