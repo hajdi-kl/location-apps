@@ -1,15 +1,14 @@
 import { TranslateLoader } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
-import { translationDefault, WEATHER_API_URL } from '@shared/config/weather';
+import { appDefaultLanguage, translationDefault, WEATHER_API_URL } from '@shared/config/weather';
 import { WeatherTranslationData } from '@shared/types/weather';
-import { PRELOADED_LANGUAGE } from '../app.component';
 
 export class CustomTranslateLoader implements TranslateLoader {
   constructor(private http: HttpClient) {}
 
   getTranslation(lang: string): Observable<WeatherTranslationData> {
-    if (lang === PRELOADED_LANGUAGE) {
+    if (lang === appDefaultLanguage) {
       return of(translationDefault);
     }
 

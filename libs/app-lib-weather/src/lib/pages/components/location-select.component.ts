@@ -1,22 +1,22 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   Payload,
   UiLibLocationSelectComponent,
 } from '@angular-monorepo/ui-lib-location-select';
-import { LibLoaderComponent } from '@libs/util-lib-common/src/lib/components/loader.component';
 import { LibLocationSelectCustomIconDirective } from '@libs/ui-lib-location-select/src/lib/ui-lib-location-select/ui-lib-location-select-custom-icon.directive';
 import { Store } from '@ngrx/store';
 import { locationSlice } from '@libs/util-lib-common/src/lib/store/weather/index';
 import { TranslateService } from '@ngx-translate/core';
+import { IonSpinner } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'lib-location-select',
   imports: [
     CommonModule,
     UiLibLocationSelectComponent,
-    LibLoaderComponent,
     LibLocationSelectCustomIconDirective,
+    IonSpinner,
   ],
   templateUrl: './location-select.component.html',
   styleUrl: './location-select.component.sass',

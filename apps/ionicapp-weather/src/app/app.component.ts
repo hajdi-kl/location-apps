@@ -3,10 +3,14 @@ import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { languageSlice } from '@libs/util-lib-common/src/lib/store/weather/index';
-import { languages, translationDefault } from '@shared/config/weather';
+import {
+  appDefaultLanguage,
+  languages,
+  translationDefault,
+} from '@shared/config/weather';
 import { initializeApp } from './store';
-
-export const PRELOADED_LANGUAGE = 'preload'; // Do not bind to any code, bound to appDefaultLanguage and translationDefault from '@shared/config/weather'
+import { CustomTranslateLoader } from './core/translate-loader';
+import { WeatherTranslationData } from '@shared/types/weather';
 
 @Component({
   selector: 'app-root',
@@ -15,33 +19,55 @@ export const PRELOADED_LANGUAGE = 'preload'; // Do not bind to any code, bound t
   imports: [IonApp, IonRouterOutlet],
 })
 export class AppComponent {
-  isDefaultLanguageSet = false;
+  private translationCache = new Map<string, WeatherTranslationData>();
 
   constructor(
     private translateService: TranslateService,
     private store: Store
   ) {
-    this.store.dispatch(initializeApp());
-
-    const langs = languages
-      .map((lang) => lang.value)
-      .concat(PRELOADED_LANGUAGE);
+    const langs = languages.map((lang) => lang.value);
+    this.translateService.addLangs(langs);
 
     // Preload one language for entire app. Other languages will be lazily loaded
-    this.translateService.addLangs(langs);
     this.translateService.setTranslation(
-      PRELOADED_LANGUAGE,
+      appDefaultLanguage,
       translationDefault
     );
-    this.translateService.use(PRELOADED_LANGUAGE);
+    this.translateService.setDefaultLang(appDefaultLanguage);
+    this.translateService.use(appDefaultLanguage);
+
+    this.store.dispatch(initializeApp());
 
     this.store.select(languageSlice.selector).subscribe((language) => {
       if (language) {
-        if (!this.isDefaultLanguageSet) {
-          this.isDefaultLanguageSet = true;
+        if (this.translationCache.has(language)) {
+          const cachedTranslations = this.translationCache.get(
+            language
+          ) as WeatherTranslationData;
+          this.translateService.setTranslation(
+            language,
+            cachedTranslations,
+            true
+          );
+          this.translateService.use(language);
+        } else {
+          this.translateService.setTranslation(language, {}, false); // Clear existing translations so CustomMissingTranslationHandler kicks in
+
+          const loader = this.translateService
+            .currentLoader as CustomTranslateLoader;
+
+          if (loader instanceof CustomTranslateLoader) {
+            loader.getTranslation(language).subscribe((translations) => {
+              this.translationCache.set(language, translations);
+              this.translateService.setTranslation(
+                language,
+                translations,
+                true
+              );
+              this.translateService.use(language);
+            });
+          }
         }
-        this.translateService.use(language);
-        this.translateService.setDefaultLang(language);
       }
     });
   }

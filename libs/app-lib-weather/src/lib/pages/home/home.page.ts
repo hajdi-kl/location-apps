@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import {
   languageSlice,
@@ -33,7 +32,7 @@ import { IonCard, IonCardContent } from '@ionic/angular/standalone';
     TranslatePipe,
     TranslateDirective,
     IonCard,
-    IonCardContent
+    IonCardContent,
   ],
   providers: [DatePipe],
   templateUrl: './home.page.html',
