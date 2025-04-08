@@ -3,8 +3,10 @@ import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { languageSlice } from '@libs/util-lib-common/src/lib/store/weather/index';
-import { languages } from '@shared/config/weather';
+import { languages, translationDefault } from '@shared/config/weather';
 import { initializeApp } from './store';
+
+export const PRELOADED_LANGUAGE = 'preload'; // Do not bind to any code, bound to appDefaultLanguage and translationDefault from '@shared/config/weather'
 
 @Component({
   selector: 'app-root',
@@ -15,19 +17,31 @@ import { initializeApp } from './store';
 export class AppComponent {
   isDefaultLanguageSet = false;
 
-  constructor(private translate: TranslateService, private store: Store) {
+  constructor(
+    private translateService: TranslateService,
+    private store: Store
+  ) {
     this.store.dispatch(initializeApp());
 
-    const langs = languages.map((lang) => lang.value);
-    this.translate.addLangs(langs);
+    const langs = languages
+      .map((lang) => lang.value)
+      .concat(PRELOADED_LANGUAGE);
+
+    // Preload one language for entire app. Other languages will be lazily loaded
+    this.translateService.addLangs(langs);
+    this.translateService.setTranslation(
+      PRELOADED_LANGUAGE,
+      translationDefault
+    );
+    this.translateService.use(PRELOADED_LANGUAGE);
 
     this.store.select(languageSlice.selector).subscribe((language) => {
       if (language) {
         if (!this.isDefaultLanguageSet) {
-          this.translate.setDefaultLang(language);
           this.isDefaultLanguageSet = true;
         }
-        this.translate.use(language);
+        this.translateService.use(language);
+        this.translateService.setDefaultLang(language);
       }
     });
   }

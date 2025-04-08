@@ -23,15 +23,17 @@ import {
 import { WEATHER_API_URL } from '@shared/config/weather';
 import { parseJSON } from '@libs/util-lib-common/src/lib/utils/common';
 import { WeatherResponse } from '@shared/types/weather';
+import { IonCard, IonCardContent } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'lib-app-home',
   imports: [
     CommonModule,
-    IonicModule,
     LocationSelectComponent,
     TranslatePipe,
     TranslateDirective,
+    IonCard,
+    IonCardContent
   ],
   providers: [DatePipe],
   templateUrl: './home.page.html',

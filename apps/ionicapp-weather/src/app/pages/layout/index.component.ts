@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from '../../components/shared/header.component';
-import { IonicModule } from '@ionic/angular';
+import { IonContent, IonRouterOutlet } from '@ionic/angular/standalone';
 
 
 @Component({
@@ -8,6 +8,6 @@ import { IonicModule } from '@ionic/angular';
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss'],
   standalone: true,
-  imports: [HeaderComponent, IonicModule],
+  imports: [HeaderComponent, IonContent, IonRouterOutlet],
 })
 export class IndexComponent {}

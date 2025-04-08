@@ -1,6 +1,6 @@
 import { createGenericReducer } from '../generic/generic.reducer';
 import { createGenericSelector } from '../generic/generic.selectors';
-import { languages } from '@shared/config/weather';
+import { appDefaultLanguage } from '@shared/config/weather';
 import { WeatherData } from '@shared/types/weather';
 
 /* In case of store props collision, use the following enum to avoid conflicts. */
@@ -11,9 +11,6 @@ export const enum StoreProps {
   Weather = 'weather',
   Loading = 'loading',
 }
-
-export const appDefaultLanguage = languages[0].value;
-
 const languageReducer = createGenericReducer(
     StoreProps.Language,
     appDefaultLanguage

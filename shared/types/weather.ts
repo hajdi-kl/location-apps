@@ -49,5 +49,11 @@ export type WeatherData = {
   icon: string;
   dt: number;
   formattedDate: string;
-}
+};
 
+export type WeatherTranslationData = {
+  dateFormat: string;
+  selectLocation: string;
+  selectLocationDescription: string;
+  loadingData: string;
+};
