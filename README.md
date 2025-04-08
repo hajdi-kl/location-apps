@@ -32,10 +32,19 @@ Example: Add controllers:
 ```sh
 nx g @nx/nest:controller apps/api-openweather/src/app/weather
 ```
+Disable NxConsole if you get "nx Daemon is not running"
 
 
 ## Libraries
 Example: Adding libs with:
 ```sh
 nx g @nx/angular:library libs/<name>
+```
+
+## NX
+```sh
+nx reset
+```
+```sh
+nx daemon start
 ```

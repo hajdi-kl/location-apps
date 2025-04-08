@@ -1,5 +1,6 @@
 import { createGenericReducer } from '@libs/util-lib-common/src/lib/store/generic/generic.reducer';
 import { createGenericSelector } from '@libs/util-lib-common/src/lib/store/generic/generic.selectors';
+import { languages } from '@shared/config/weather';
 
 /* In case of store props collision, use the following enum to avoid conflicts. */
 
@@ -9,7 +10,8 @@ export const enum StoreProps {
   Loading = 'loading',
 }
 
-const languageReducer = createGenericReducer(StoreProps.Language, 'en'),
+export const appDefaultLanguage = languages[0].value;
+const languageReducer = createGenericReducer(StoreProps.Language, appDefaultLanguage),
   languageSlice = {
     reducer: languageReducer.reducer,
     selector: createGenericSelector(StoreProps.Language),
@@ -35,3 +37,10 @@ const loadingReducer = createGenericReducer(StoreProps.Loading, true),
 
 
 export { languageSlice, locationSlice, loadingSlice };
+
+/////////////////////////////////
+
+import { createAction } from '@ngrx/store';
+
+export const initializeApp = createAction('[App] Initialize');
+
