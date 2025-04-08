@@ -1,12 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { tap } from 'rxjs/operators';
-import { initializeApp, languageSlice, locationSlice, StoreProps } from '../store';
+import { languageSlice, locationSlice, StoreProps } from '@libs/util-lib-common/src/lib/store/weather/index';
 import { Payload } from '@angular-monorepo/ui-lib-location-select';
 import { parseJSON } from '@libs/util-lib-common/src/lib/utils/common';
 import { Store } from '@ngrx/store';
 import { LocaleService } from './locale.service';
 import { Language } from '@shared/config';
+import { initializeApp } from '../store';
 
 @Injectable({ providedIn: 'root' })
 export class PersistDataService {

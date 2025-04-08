@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { PersistDataService } from './persist-data.service';
-import { languageSlice, locationSlice } from '../store';
-
+import { languageSlice, locationSlice } from '@libs/util-lib-common/src/lib/store/weather/index';
 @Injectable()
 export class AppEffects {
   private persistData = inject(PersistDataService);

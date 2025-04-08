@@ -14,7 +14,7 @@ import {
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
-import { appDefaultLanguage, languageSlice, loadingSlice, locationSlice, weatherSlice } from './app/store';
+import { appDefaultLanguage, languageSlice, loadingSlice, locationSlice, weatherSlice } from '@libs/util-lib-common/src/lib/store/weather/index';
 import {
   HttpClient,
   provideHttpClient,

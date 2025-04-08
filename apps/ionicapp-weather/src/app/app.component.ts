@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { initializeApp, languageSlice } from './store';
+import { languageSlice } from '@libs/util-lib-common/src/lib/store/weather/index';
 import { languages } from '@shared/config/weather';
+import { initializeApp } from './store';
 
 @Component({
   selector: 'app-root',

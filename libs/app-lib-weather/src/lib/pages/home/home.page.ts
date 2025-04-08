@@ -7,8 +7,8 @@ import {
   loadingSlice,
   locationSlice,
   weatherSlice,
-} from '@apps/ionicapp-weather/src/app/store/index';
-import { WeatherData } from '@apps/ionicapp-weather/src/app/models/weather.model';
+} from '@libs/util-lib-common/src/lib/store/weather/index';
+import { WeatherData } from '@shared/types/weather';
 
 import { LocationSelectComponent } from '../components/location-select.component';
 import { Payload } from '@angular-monorepo/ui-lib-location-select';
