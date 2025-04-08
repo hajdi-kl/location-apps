@@ -60,14 +60,8 @@ export class UiLibLocationSelectComponent implements AfterContentChecked {
     const actionSheet = await this.actionSheetController.create({
       header: 'Choose an option',
       buttons: [
-        ...this.options.map((option) => ({
-          text: option.name,
-          handler: () => {
-            this.selectionChange.emit(option);
-          },
-        })),
         {
-          text: 'Set Latitude and Longitude',
+          text: 'Current location',
           handler: async () => {
             try {
               const position = await Geolocation.getCurrentPosition(),
@@ -81,6 +75,12 @@ export class UiLibLocationSelectComponent implements AfterContentChecked {
             }
           },
         },
+        ...this.options.map((option) => ({
+          text: option.name,
+          handler: () => {
+            this.selectionChange.emit(option);
+          },
+        })),
         {
           text: 'Cancel',
           role: 'cancel',

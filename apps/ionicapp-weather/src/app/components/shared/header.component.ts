@@ -3,7 +3,7 @@ import { IonHeader, IonToolbar, IonTitle } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
 import { UiLibLanguageSelectComponent } from '@angular-monorepo/ui-lib-language-select';
 import { Store } from '@ngrx/store';
-import { languageSlice } from '../../store';
+import { languageSlice } from '@libs/util-lib-common/src/lib/store/weather/index';
 import { languages } from '@shared/config/weather';
 import { take } from 'rxjs/operators';
 

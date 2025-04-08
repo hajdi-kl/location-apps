@@ -41,3 +41,21 @@ export type WeatherResponse = {
   name: string;
   cod: number;
 };
+
+export type WeatherData = {
+  temp: number;
+  feelsLike: number;
+  weather: string;
+  icon: string;
+  dt: number;
+  formattedDate: string;
+  location: string;
+};
+
+export type WeatherTranslationData = {
+  dateFormat: string;
+  selectLocation: string;
+  selectLocationDescription: string;
+  loadingData: string;
+  errorMessage: string;
+};

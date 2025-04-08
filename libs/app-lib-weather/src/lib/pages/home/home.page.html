@@ -1,5 +1,29 @@
-<div>
+<ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+  <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
+<div class="weather-data-container">
+  @if (weatherData$ | async; as weatherData) {
+  <ion-card class="weather-data-card">
+    <ion-card-content>
+      <div>
+        <p>{{ locationDisplay$ | async}}</p>
+        <p>{{ weatherData.formattedDate }}</p>
+        <p>{{ weatherData.weather }}</p>
+        <p>Temperature: {{ weatherData.temp }}°C</p>
+        <p>Feels like: {{ weatherData.feelsLike }}°C</p>
+        <img
+          [src]="'http://openweathermap.org/img/w/' + weatherData.icon + '.png'"
+          alt="Weather icon"
+        />
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  } @else { @if (error()) {
+  <p class="ion-text-center text-danger">{{ 'errorMessage' | translate }}</p>
+  } @else {
+  <h2 class="ion-text-center">{{ 'selectLocation' | translate }}</h2>
+  <p class="ion-text-center">{{ 'selectLocationDescription' | translate }}</p>
+  } }
   <lib-location-select [loading]="loading$ | async"></lib-location-select>
-  <h1>{{ 'hello' | translate }}</h1>
-  <div translate="hello"></div>
 </div>

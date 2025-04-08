@@ -1,12 +1,12 @@
 <lib-ui-lib-location-select
   [disabled]="loading"
   [options]="locationOptions"
-  [placeholder]="'Select a location'"
+  [placeholder]="loading ? loadingData : selectLocation"
   (selectionChange)="onLocationChange($event)"
 >
   <div libLocationSelectCustomIcon>
     @if (loading) {
-    <lib-loader></lib-loader>
+    <ion-spinner name="crescent"></ion-spinner>
     }
   </div>
 </lib-ui-lib-location-select>
