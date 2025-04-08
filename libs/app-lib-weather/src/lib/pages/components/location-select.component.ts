@@ -7,7 +7,7 @@ import {
 import { LibLoaderComponent } from '@libs/util-lib-common/src/lib/components/loader.component';
 import { LibLocationSelectCustomIconDirective } from '@libs/ui-lib-location-select/src/lib/ui-lib-location-select/ui-lib-location-select-custom-icon.directive';
 import { Store } from '@ngrx/store';
-import { locationSlice } from 'apps/ionicapp-weather/src/app/store';
+import { locationSlice } from '@apps/ionicapp-weather/src/app/store';
 
 @Component({
   selector: 'lib-location-select',
@@ -28,6 +28,7 @@ export class LocationSelectComponent {
     { name: 'Ljubljana', value: 'Ljubljana' },
     { name: 'Celje', value: 'Celje' },
     { name: 'Maribor', value: 'Maribor' },
+    { name: 'Invalid', value: 'Invalid' },
   ];
 
   onLocationChange(selectedLocation: Payload) {

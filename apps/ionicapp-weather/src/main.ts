@@ -15,9 +15,12 @@ import {
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { languageSlice, loadingSlice, locationSlice } from './app/store';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { fakeDelayInterceptor } from './app/interceptors/fake-delay.interceptor';
 
 bootstrapApplication(AppComponent, {
   providers: [
+    provideHttpClient(withInterceptors([fakeDelayInterceptor])),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
