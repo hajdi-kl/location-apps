@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import {
   languageSlice,
+  loadingSlice,
   locationSlice,
 } from '@apps/ionicapp-weather/src/app/store/index';
 import { LocationSelectComponent } from '../components/location-select.component';
@@ -11,12 +12,10 @@ import { Payload } from '@angular-monorepo/ui-lib-location-select';
 import { catchError, combineLatest, finalize, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { SelectOption } from '@shared/types/common';
-import {
-  TranslateDirective,
-  TranslatePipe,
-} from '@ngx-translate/core';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { WEATHER_API_URL } from '@shared/config/weather';
-import { parseJSON } from '@libs/util-lib-common/src/lib/utils/common'
+import { parseJSON } from '@libs/util-lib-common/src/lib/utils/common';
+import { WeatherResponse } from '@shared/types/weather';
 
 @Component({
   selector: 'lib-app-home',
@@ -31,12 +30,11 @@ import { parseJSON } from '@libs/util-lib-common/src/lib/utils/common'
   styleUrl: './home.page.scss',
 })
 export class HomePageComponent {
-  loading = signal(false); // Doesn't make sense to save in store, as it is only used in this component
+  loading$;
 
-  constructor(
-    private store: Store,
-    private http: HttpClient,
-  ) {
+  constructor(private store: Store, private http: HttpClient) {
+    this.loading$ = this.store.select(loadingSlice.selector);
+
     combineLatest([
       this.store.select(languageSlice.selector),
       this.store.select(locationSlice.selector),
@@ -53,7 +51,7 @@ export class HomePageComponent {
 
   checkAndFetchWeatherData(language: string, locationData: any | null) {
     if (locationData && language) {
-      this.loading.set(true);
+      this.store.dispatch(loadingSlice.set({ [loadingSlice.prop]: true }));
 
       const params: any = {
         lang: language,
@@ -71,20 +69,26 @@ export class HomePageComponent {
       this.http
         .get(WEATHER_API_URL + '/data', { params })
         .pipe(
-          tap(response => {
-            // Dispatch success action to the store
-            console.log('Weather data:', response);
+          tap((response) => {
+            const data = response as WeatherResponse;
+            const storeData = {
+              temp: data.main.temp,
+              feelsLike: data.main.feels_like,
+              weather: data.weather[0].description,
+              icon: data.weather[0].icon,
+            }
           }),
           catchError((error) => {
             console.error('Error fetching data:', error);
             return [];
           }),
           finalize(() => {
-            this.loading.set(false);
+            this.store.dispatch(
+              loadingSlice.set({ [loadingSlice.prop]: false })
+            );
           })
         )
         .subscribe();
-
     }
   }
 }

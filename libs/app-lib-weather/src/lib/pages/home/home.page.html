@@ -1,5 +1,5 @@
 <div>
-  <lib-location-select [loading]="loading()"></lib-location-select>
+  <lib-location-select [loading]="loading$ | async"></lib-location-select>
   <h1>{{ 'hello' | translate }}</h1>
   <div translate="hello"></div>
 </div>

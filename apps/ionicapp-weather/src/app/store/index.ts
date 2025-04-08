@@ -27,7 +27,7 @@ locationSlice = {
     set: locationReducer.set,
   };
 
-const loadingReducer = createGenericReducer(StoreProps.Loading, true),
+const loadingReducer = createGenericReducer(StoreProps.Loading, false),
   loadingSlice = {
     reducer: loadingReducer.reducer,
     selector: createGenericSelector(StoreProps.Loading),
