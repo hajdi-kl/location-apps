@@ -12,4 +12,3 @@ export function createGenericReducer(stateProp: string, initialValue: any) {
     set,
   };
 }
-

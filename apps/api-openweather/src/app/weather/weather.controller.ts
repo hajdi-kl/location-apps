@@ -9,25 +9,29 @@ import {
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import axios from 'axios';
-import { AppService } from './app.service';
+import { AppService } from '../app.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { WeatherResponse } from '@shared/types/weather';
+// import { WEATHER_API_URL } from '@shared/config/weather';
+import { Language } from '@shared/config/index';
+import { WeatherTranslationService } from './translations/translation.service';
 
 @Controller('weather')
 export class WeatherController {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly appService: AppService,
+    private readonly translateService: WeatherTranslationService
   ) {}
-
 
   @Get('data')
   async getWeatherData(
     @Query('lat') lat: string,
     @Query('lon') lon: string,
     @Query('q') q: string,
+    @Query('lang') lang: string,
     @Query('refresh') refresh: string,
-    @Req() req: any,
+    @Req() req: any
   ) {
     let queryParam: string;
 
@@ -38,7 +42,7 @@ export class WeatherController {
     } else {
       throw new HttpException(
         'Either valid Latitude and Longitude or a query parameter (q) is required',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
@@ -55,10 +59,11 @@ export class WeatherController {
     // Fetch weather data from OpenWeatherMap API
     const apiKey = this.appService.weatherApiKey;
     try {
-      // https://api.openweathermap.org/data/2.5/weather?q=London&appid=YOUR_API_KEY&lang=sl
       const response = await axios.get(
-        // `https://api.openweathermap.org/data/2.5/weather?${queryParam}&appid=${apiKey}`,
-        'http://localhost:3000/api/weather/dummy'
+        `https://api.openweathermap.org/data/2.5/weather?${queryParam}&appid=${apiKey}&units=metric&lang=${
+          lang || Language.English
+        }`
+        // WEATHER_API_URL + '/dummy'
       );
       const data = response.data as WeatherResponse;
 
@@ -69,7 +74,7 @@ export class WeatherController {
     } catch {
       throw new HttpException(
         'Failed to fetch weather data',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -77,5 +82,22 @@ export class WeatherController {
   @Get('dummy')
   getHelloWorld() {
     return this.appService.getDummyData();
+  }
+
+  @Get('translations')
+  async getTranslations(@Query('lang') lang: string) {
+    if (!lang) {
+      throw new HttpException(
+        'Missing language parameter',
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    try {
+      const translations = this.translateService.getTranslation(lang);
+      return translations;
+    } catch (error) {
+      throw new HttpException('Language not supported', HttpStatus.BAD_REQUEST);
+    }
   }
 }

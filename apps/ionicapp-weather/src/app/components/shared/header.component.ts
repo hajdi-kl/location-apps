@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { UiLibLanguageSelectComponent } from '@angular-monorepo/ui-lib-language-select';
 import { Store } from '@ngrx/store';
 import { languageSlice } from '../../store';
+import { languages } from '@shared/config/weather';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -19,15 +21,22 @@ import { languageSlice } from '../../store';
   ],
 })
 export class HeaderComponent {
-  currentLanguage = signal('en');
+  currentLanguage = signal('');
 
-  availableLanguages = [
-    { name: 'English', value: 'en' },
-    { name: 'Spanish', value: 'es' },
-    { name: 'French', value: 'fr' },
-  ];
+  availableLanguages = languages;
 
   constructor(private store: Store) {
+    // Initialize currentLanguage with the value from the store
+    this.store
+      .select(languageSlice.selector)
+      .pipe(take(1)) // Take the initial value only
+      .subscribe((language) => {
+        if (language) {
+          this.currentLanguage.set(language);
+        }
+      });
+
+    // Effect to dispatch language changes to the store
     effect(() => {
       const newLanguage = this.currentLanguage();
       this.store.dispatch(

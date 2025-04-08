@@ -28,6 +28,7 @@
       "@angular-monorepo/util-lib-common": [
         "libs/util-lib-common/src/index.ts"
       ],
+      "@apps/*": ["apps/*"],
       "@libs/*": ["libs/*"],
       "@shared/*": ["shared/*"]
     }
