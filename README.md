@@ -7,17 +7,7 @@
 ```sh
 nx serve ionicapp-weather
 ```
-Ionic:
-```sh
-nx build ionicapp-weather
-```
-```sh
-nx run ionicapp-weather:sync:android
-```
-```sh
-nx run ionicapp-weather:open:android
-```
-Example:
+Graph:
 ```sh
 nx show project ionicapp-weather
 ```
@@ -32,7 +22,7 @@ Example: Add controllers:
 ```sh
 nx g @nx/nest:controller apps/api-openweather/src/app/weather
 ```
-Disable NxConsole if you get "nx Daemon is not running"
+Disable NxConsole VSCode extension if you get "nx Daemon is not running"
 
 
 ## Libraries
@@ -47,4 +37,18 @@ nx reset
 ```
 ```sh
 nx daemon start
+```
+
+## Cap
+
+```sh
+cd apps/ionicapp-weather
+npx cap add android
+npx cap add ios
+ifconfig
+# copy IPv4 to API_URL in shared\config\index.ts
+nx build ionicapp-weather
+# npx cap sync
+nx run ionicapp-weather:sync:android
+nx run ionicapp-weather:open:android
 ```
